@@ -85,7 +85,7 @@ Connection.prototype.message = function(msg) {
     } else if (msg.acn == "sys") {
         // Clock update
         if(typeof callback_clock === 'function') {
-            callback_clock(msg.txt);
+            callback_clock(timestampConvert(msg.txt));
         }
     }
 }
@@ -144,4 +144,22 @@ function clear_timeouts() {
     while (id--) {
         window.clearTimeout(id);
     }
+}
+
+function timestampConvert(unix_timestamp) {
+// https://stackoverflow.com/a/847196
+// Create a new JavaScript Date object based on the timestamp
+// multiplied by 1000 so that the argument is in milliseconds, not seconds.
+var date = new Date(unix_timestamp * 1000);
+// Hours part from the timestamp
+var hours = date.getHours();
+// Minutes part from the timestamp
+var minutes = "0" + date.getMinutes();
+// Seconds part from the timestamp
+var seconds = "0" + date.getSeconds();
+
+var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+// console.log(formattedTime);
+return formattedTime;
 }
